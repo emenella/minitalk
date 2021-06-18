@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 15:28:21 by emenella          #+#    #+#             */
-/*   Updated: 2021/06/18 14:37:12 by emenella         ###   ########.fr       */
+/*   Updated: 2021/06/18 15:39:44 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	send_char_to_pid(int pid, char c)
 	{
 		nb = (c >> i++) & 1;
 		send_signal(pid, nb);
-		pause();
+		usleep(800);
 	}
 }
 
