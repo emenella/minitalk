@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 15:28:21 by emenella          #+#    #+#             */
-/*   Updated: 2021/05/31 17:38:03 by emenella         ###   ########.fr       */
+/*   Updated: 2021/06/18 15:39:44 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	send_char_to_pid(int pid, char c)
 	while (i < 8)
 	{
 		nb = (c >> i++) & 1;
-		usleep(800);
 		send_signal(pid, nb);
+		usleep(800);
 	}
 }
 
@@ -50,6 +50,11 @@ void	send_str_to_pid(int pid, char *str)
 	send_char_to_pid(pid, 0);
 }
 
+void	handler(int sig)
+{
+	sig = 0;
+}
+
 int	main(int argc, char **arg)
 {
 	int	pid_server;
@@ -59,6 +64,7 @@ int	main(int argc, char **arg)
 		pid_server = ft_atoi(arg[1]);
 		if (pid_server <= 1)
 			ft_putstr_fd("Error PID\n", 1);
+		signal(SIGUSR1, &handler);
 		send_str_to_pid(pid_server, arg[2]);
 	}
 	else
