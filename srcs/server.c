@@ -6,7 +6,7 @@
 /*   By: emenella <emenella@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 16:06:39 by emenella          #+#    #+#             */
-/*   Updated: 2021/05/31 17:39:47 by emenella         ###   ########.fr       */
+/*   Updated: 2021/06/18 14:41:12 by emenella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,28 @@ void	write_char(int sig)
 	}
 }
 
-void	write_signal(int code)
+void	write_signal(int sig, siginfo_t *info, void *context)
 {
-	if (code == SIGUSR1)
+	if (sig == SIGUSR1)
 		write_char(0);
-	if (code == SIGUSR2)
+	if (sig == SIGUSR2)
 		write_char(1);
+	(void)context;
+	kill(info->si_pid, SIGUSR1);
 }
 
 void	init_signal(void)
 {
-	if (signal(SIGUSR1, &write_signal) == SIG_ERR)
+	struct sigaction	sa;
+
+	sa.sa_flags = SA_SIGINFO;
+    sa.sa_sigaction = write_signal;
+	if (sigaction(SIGUSR1, &sa, NULL) == -1)
 	{
 		ft_putstr_fd("Error: initialize of signal is failed", 1);
 		exit(0);
 	}
-	if (signal(SIGUSR2, &write_signal) == SIG_ERR)
+	if (sigaction(SIGUSR2, &sa, NULL) == -1)
 	{
 		ft_putstr_fd("Error: initialize of signal is failed", 1);
 		exit(0);
